@@ -1,0 +1,26 @@
+clear all
+%
+%% VFB
+Qeff = 2e11;
+dox = 5e-6;
+Na = 1e14;
+Dit = 2.5e11;
+ni = 1.5e10;
+q = 1.6e-19;
+KT = 0.0259;
+eps0 = 8.85e-14;
+eps_sio2 =  3.9 * eps0;
+
+cox = eps_sio2 / dox;
+phi_ms = 4.1 - (4.15 + 1.12 / 2 + KT * log(Na / ni));
+Efi = KT * log(ni / Na);
+Qit0 = -Efi * Dit;
+Vfb = phi_ms - Qeff * q / cox - Qit0 * q / cox;
+%% CFB / COX
+lambda_p = (KT * 11.9 * eps0 / (q * Na)) .^0.5;
+Cfbs = 11.9 * eps0 / lambda_p;
+Cfb_over_Cox = Cfbs / (cox + Cfbs);
+%% CLF / COX
+Cit = q * Dit;
+Clf = (1 / cox +1 / (Cfbs + Cit)) .^-1;
+Clf_over_Cox = Clf / cox;
