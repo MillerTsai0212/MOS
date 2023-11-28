@@ -1,0 +1,24 @@
+clear all
+ni = 1.5e10;
+tau = 40e-6;
+Na = 4e14;
+dox = 2.5e-6;
+KT = 0.0259;
+q = 1.6e-19;
+eps0 = 8.85e-14;
+eps_si = 11.9 * eps0;
+eps_sio2 = 3.9 * eps0;
+
+phi_b = KT * log(Na / ni);
+phi_s = abs(phi_b) * 2;
+Wd = (2 * eps_si * phi_s / (q * Na)) ^ 0.5;
+Cd = eps_si / Wd;
+Cox = eps_sio2 / dox;
+Chf = (1 / Cox + 1 / Cd)^-1;
+dNi_dt = ni * eps_si / tau * (1 / (0.38 * Chf) - 1 / Chf);
+Wt_star = eps_si * (1 / (0.38 * Chf) - 1 / Cox);
+Wt_star_Wd = Wt_star / Wd;
+Cd_star = eps_si / Wt_star;
+Chf_star = (1 / Cox + 1 / Cd_star)^-1;
+dCoxChf_squre_dt = - dNi_dt * 2 * Cox / (Na * eps_si);
+dCoxChf_dt = (Chf_star / Cox) * dCoxChf_squre_dt * 0.5;
